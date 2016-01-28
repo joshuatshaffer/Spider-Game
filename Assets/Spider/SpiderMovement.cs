@@ -42,6 +42,7 @@ public class SpiderMovement : MonoBehaviour {
 	private bool isGrounded = false, hasTraction = false;
 
 	private Rigidbody body;
+	private bool paused = false;
 
 	void Start () {
 		body = GetComponent<Rigidbody> ();
@@ -61,9 +62,17 @@ public class SpiderMovement : MonoBehaviour {
 	}
 
 	void Update () {
-		UpdateHead ();
-		if (!isJumping && isGrounded && Input.GetButtonDown ("Jump")) {
-			Jump ();
+		if (paused) {
+			if (Input.GetMouseButtonDown(0)) {
+				OnResume();
+			}
+		} else if (Input.GetButton("Cancel")) {
+			OnPause();
+		} else {
+			UpdateHead ();
+			if (!isJumping && isGrounded && Input.GetButtonDown ("Jump")) {
+				Jump ();
+			}
 		}
 	}
 
@@ -107,7 +116,6 @@ public class SpiderMovement : MonoBehaviour {
 		} else {
 			FallingAngular ();
 		}
-		Debug.Log(body.angularVelocity);
 	}
 
 	void Jump () {
@@ -224,6 +232,16 @@ public class SpiderMovement : MonoBehaviour {
 		return mat.dynamicFriction < 0.01 &&
 			mat.staticFriction < 0.01 &&
 			mat.frictionCombine == PhysicMaterialCombine.Minimum;
+	}
+
+	void OnPause () {
+		paused = true;
+		lockCurser (false);
+	}
+
+	void OnResume () {
+		paused = false;
+		lockCurser (true);
 	}
 
 	void lockCurser (bool isLock=true) {
