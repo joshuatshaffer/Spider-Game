@@ -1,0 +1,17 @@
+syntax: glob
+Library
+Temp
+*.pidb
+*.sln
+*.userprefs
+*.csproj
+*.orig
+*.orig.meta
+.DS_Store
+thumbs.db
+.mayaSwatches
+workspace.mel
+*.unityproj
+*.pidb
+Sounds.meta
+workspace.mel.meta
