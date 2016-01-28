@@ -47,13 +47,7 @@ public class SpiderMovement : MonoBehaviour {
 	void Start () {
 		body = GetComponent<Rigidbody> ();
 
-		List<Vector3> spherePoints = initialize_sphere(4);
-		for (int i=0; i<spherePoints.Count; ++i) {
-			if (spherePoints[i].y > 0.1f) {
-				spherePoints.RemoveAt(i--);
-			}
-		}
-		feetDirections = spherePoints.ToArray();
+		InitFeetDirections();
 
 		lastHeadAxis = head.forward;
 		lastNeckAxis = neck.forward;
@@ -77,10 +71,10 @@ public class SpiderMovement : MonoBehaviour {
 	}
 
 	void UpdateHead () {
-		//Head and neck MUST be done seperatly because singularities are a pain in the ass.
+		//Head and neck MUST be done separately because singularities are a pain in the ass.
 
 		Quaternion groundRotation = Quaternion.AngleAxis(groundAngularVelocity.magnitude * Mathf.Rad2Deg * Time.fixedDeltaTime, groundAngularVelocity);
-		//Quaternion groundRotation = Quaternion.identity;
+
 		lastNeckAxis = groundRotation * lastNeckAxis;
 		lastHeadAxis = groundRotation * lastHeadAxis;
 		
@@ -217,8 +211,12 @@ public class SpiderMovement : MonoBehaviour {
 			groundNormal.Normalize();
 			isGrounded = true;
 
-			body.AddTorque (groundAngularVelocity - lastGroundAngularVelocity, ForceMode.VelocityChange);
-			body.AddForce (groundVelocity - lastGroundVelocity, ForceMode.VelocityChange);
+			//TODO stop jitter and sliding when on moving platform
+			//these lines help a little but not enough
+			Vector3 deltaGV = groundVelocity - lastGroundVelocity;
+			Vector3 deltaGAV = groundAngularVelocity - lastGroundAngularVelocity;
+			body.AddTorque (deltaGAV, ForceMode.VelocityChange);
+			body.AddForce (deltaGV, ForceMode.VelocityChange);
 
 			return true;
 		} else {
@@ -247,6 +245,16 @@ public class SpiderMovement : MonoBehaviour {
 	void lockCurser (bool isLock=true) {
 		Cursor.visible = !isLock;
 		Cursor.lockState = isLock ? CursorLockMode.Locked : CursorLockMode.None;
+	}
+
+	void InitFeetDirections () {
+		List<Vector3> spherePoints = initialize_sphere(4);
+		for (int i=0; i<spherePoints.Count; ++i) {
+			if (spherePoints[i].y > 0.1f) {
+				spherePoints.RemoveAt(i--);
+			}
+		}
+		feetDirections = spherePoints.ToArray();
 	}
 
 	//Not my work. Gotten from http://stackoverflow.com/questions/17705621/algorithm-for-a-geodesic-sphere
