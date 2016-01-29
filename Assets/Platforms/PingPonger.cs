@@ -12,7 +12,7 @@ public class PingPonger : MonoBehaviour {
 	}
 
 	void FixedUpdate () {
-		float t = Mathf.PingPong(Time.time*0.1f, 1);
+		float t = Mathf.Sin(Time.fixedTime*0.1f*6) * 0.5f + 0.5f;
 		body.MovePosition(Vector3.Lerp(start.position, stop.position, t));
 		body.MoveRotation(Quaternion.Lerp(start.rotation, stop.rotation, t));
 	}

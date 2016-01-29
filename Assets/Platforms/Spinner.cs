@@ -12,7 +12,8 @@ public class Spinner : MonoBehaviour {
 		body = GetComponent<Rigidbody> ();
 	}
 
-	void Update () {
-		body.MoveRotation (Quaternion.AngleAxis(Time.time*speed, axis));
+	void FixedUpdate () {
+		Debug.Log (body.angularVelocity);
+		body.MoveRotation (Quaternion.AngleAxis(Time.fixedTime*speed, axis));
 	}
 }
