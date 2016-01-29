@@ -3,17 +3,18 @@ using System.Collections;
 
 public class Spinner : MonoBehaviour {
 	
-	public float speed = 40;
+	public float speed = 40; //Degrees Per Second
 	public Vector3 axis = Vector3.up;
 
+	private Quaternion originalRotation;
 	private Rigidbody body;
 
-	void Start () {
+	void Awake () {
 		body = GetComponent<Rigidbody> ();
+		originalRotation = body.rotation;
 	}
 
 	void FixedUpdate () {
-		Debug.Log (body.angularVelocity);
-		body.MoveRotation (Quaternion.AngleAxis(Time.fixedTime*speed, axis));
+		body.MoveRotation (originalRotation * Quaternion.AngleAxis(Time.fixedTime*speed, axis));
 	}
 }
