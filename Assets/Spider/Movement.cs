@@ -36,7 +36,12 @@ namespace PlayerMovement {
 
 		public void Update () {
 			if (!isJumping && ground.isGrounded && Input.GetButtonDown ("Jump")) {
-				body.AddForce (head.axis * jumpSpeed, ForceMode.VelocityChange);
+				if (ground.hasTraction) {
+					body.AddForce (head.axis * jumpSpeed, ForceMode.VelocityChange);
+				} else {
+					body.AddForce (Vector3.Project(head.axis * jumpSpeed, ground.normal), ForceMode.VelocityChange);
+
+				}
 				lastJumpTime = Time.time;
 			}
 		}
