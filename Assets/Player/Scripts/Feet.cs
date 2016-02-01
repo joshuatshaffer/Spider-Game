@@ -30,7 +30,7 @@ namespace PlayerMovement {
 		public void Casts () {
 			foreach (Vector3 d in directions) {
 				RaycastHit hit;
-				if (Physics.Raycast (body.position, body.rotation * d, out hit, length)) {
+				if (Physics.Raycast (body.position, body.rotation * d, out hit, length, ~0, QueryTriggerInteraction.Ignore)) {
 					if (hit.rigidbody != body) {
 						ground.ProcessHit (hit);
 					}
