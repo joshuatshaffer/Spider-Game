@@ -4,6 +4,7 @@ using UnityEngine.SceneManagement;
 using System.Collections;
 using System.Collections.Generic;
 
+//This must be above all scripts that refer to LevelController.current in the execution order.
 public class LevelController : MonoBehaviour {
 
 	public static LevelController current;
@@ -17,7 +18,7 @@ public class LevelController : MonoBehaviour {
 
 	private List<GameObject> pausedObjects;
 
-	void Start () {
+	void Awake () {
 		if (current == null) {
 			current = this;
 		} else {
@@ -61,6 +62,8 @@ public class LevelController : MonoBehaviour {
 			}
 		}
 		pauseMenu.SetActive(true);
+
+		SetCurserLock(false);
 	}
 
 	public void Unpause() {
@@ -72,5 +75,11 @@ public class LevelController : MonoBehaviour {
 			go.BroadcastMessage("OnUnpause", SendMessageOptions.DontRequireReceiver);
 		}
 		pauseMenu.SetActive(false);
+	}
+
+
+	public void SetCurserLock (bool isLocked=true) {
+		Cursor.lockState = isLocked ? CursorLockMode.Locked : CursorLockMode.None;
+		Cursor.visible = !isLocked;
 	}
 }

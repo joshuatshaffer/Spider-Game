@@ -26,7 +26,7 @@ namespace PlayerMovement {
 			head.Init (ground);
 			movement.Init (body, ground, head, transform);
 
-			SetCurserLock (true);
+			OnUnpause ();
 		}
 
 		void Update () {
@@ -39,17 +39,9 @@ namespace PlayerMovement {
 			movement.FixedUpdate ();
 		}
 
-		void OnPause () {
-			SetCurserLock(false);
-		}
-
 		void OnUnpause () {
-			SetCurserLock(true);
-		}
-
-		void SetCurserLock (bool isLocked=true) {
-			Cursor.lockState = isLocked ? CursorLockMode.Locked : CursorLockMode.None;
-			Cursor.visible = !isLocked;
+			LevelController.current.SetCurserLock (true);
+			Input.ResetInputAxes();
 		}
 	}
 }
