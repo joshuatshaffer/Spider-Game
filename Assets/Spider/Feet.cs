@@ -18,7 +18,7 @@ namespace PlayerMovement {
 			body = b;
 			ground = g;
 
-			List<Vector3> spherePoints = initialize_sphere(3);
+			List<Vector3> spherePoints = initialize_sphere(4);
 			for (int i=0; i<spherePoints.Count; ++i) {
 				if (spherePoints[i].y > 0.1f) {
 					spherePoints.RemoveAt(i--);
