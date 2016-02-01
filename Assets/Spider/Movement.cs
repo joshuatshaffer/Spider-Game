@@ -40,7 +40,6 @@ namespace PlayerMovement {
 					body.AddForce (head.axis * jumpSpeed, ForceMode.VelocityChange);
 				} else {
 					body.AddForce (Vector3.Project(head.axis * jumpSpeed, ground.normal), ForceMode.VelocityChange);
-
 				}
 				lastJumpTime = Time.time;
 			}

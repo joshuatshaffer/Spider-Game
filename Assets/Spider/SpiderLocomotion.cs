@@ -7,11 +7,12 @@ using System.Collections.Generic;
  * remove jitter when on rigidbody (probably due to position update timeing)
  */
 namespace PlayerMovement {
+	[RequireComponent (typeof (Rigidbody))]
 	public class SpiderLocomotion : MonoBehaviour {
 
-		[SerializeField] public Movement movement;
-		[SerializeField] public Head head;
-		[SerializeField] public Feet feet;
+		public Movement movement;
+		public Head head;
+		public Feet feet;
 
 		private Ground ground;
 		private Rigidbody body;
@@ -24,6 +25,8 @@ namespace PlayerMovement {
 			ground.Init (body, feet);
 			head.Init (ground);
 			movement.Init (body, ground, head, transform);
+
+			SetCurserLock ();
 		}
 
 		void Update () {
@@ -34,6 +37,11 @@ namespace PlayerMovement {
 		void FixedUpdate () {
 			ground.Update ();
 			movement.FixedUpdate ();
+		}
+
+		void SetCurserLock (bool isLocked=true) {
+			Cursor.lockState = isLocked ? CursorLockMode.Locked : CursorLockMode.None;
+			Cursor.visible = !isLocked;
 		}
 	}
 }
