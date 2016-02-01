@@ -8,7 +8,10 @@ using System.Collections.Generic;
 public class LevelController : MonoBehaviour {
 
 	public static LevelController current;
-	
+	public Checkpoint activeCheckpoint;
+	public GameObject gameplayCanvace;
+	public GameObject playerPrefab;
+
 	public enum LevelState {
 		normal, paused, won, failed
 	}
@@ -17,6 +20,12 @@ public class LevelController : MonoBehaviour {
 	public int pausePixelation = 8;
 	public GameObject pauseMenu;
 	public RawImage lastImage;
+
+	public float killHeight = -100;
+
+	public GameObject deathFade;
+	public GameObject respawnFade;
+	public GameObject winFade;
 
 	private RenderTexture lastTexture;
 	private List<GameObject> pausedObjects;
@@ -30,21 +39,46 @@ public class LevelController : MonoBehaviour {
 		}
 		state = LevelState.normal;
 		pauseMenu.SetActive(false);
+		activeCheckpoint.SpawnPlayer ();
 	}
-
+	
 	void Update () {
 		if (Input.GetButtonDown("Cancel")) {
 			Pause();
 		}
 	}
-
-	public void QuitLevel () {
-		SceneManager.LoadScene("Main Menu");
+	
+	public bool ActivateCheckpoint (Checkpoint cp) {
+		if (activeCheckpoint != cp) {
+			activeCheckpoint = cp;
+			return true;
+		} else {
+			return false;
+		}
 	}
 
+	public void PlayerDied () {
+		InstantiateFade (deathFade);
+	}
+
+	public void SpawnPlayer () {
+		activeCheckpoint.SpawnPlayer ();
+		InstantiateFade (respawnFade);
+	}
+	
 	public void WinLevel () {
 		if (state != LevelState.normal) return;
 		state = LevelState.won;
+		InstantiateFade (winFade);
+	}
+
+	void InstantiateFade (GameObject fade) {
+		(Instantiate(fade) as GameObject).transform.SetParent(gameplayCanvace.transform, false);
+	}
+
+	public void QuitLevel () {
+		SceneManager.LoadScene("Main Menu");
+		SetCurserLock (false);
 	}
 
 	public void Pause() {

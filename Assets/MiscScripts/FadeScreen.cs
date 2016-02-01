@@ -30,12 +30,12 @@ public class FadeScreen : MonoBehaviour {
 				Destroy(gameObject);
 				break;
 			case ActionOnFin.endLevel:
-				Destroy(gameObject);
+				Destroy(this);
 				LevelController.current.QuitLevel();
 				break;
 			case ActionOnFin.respawnPlayer:
 				Destroy(gameObject);
-				Checkpoint.active.SpawnPlayer();
+				LevelController.current.SpawnPlayer();
 				break;
 			}
 		}

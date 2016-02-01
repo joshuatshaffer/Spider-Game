@@ -3,16 +3,19 @@ using System.Collections;
 
 public class Checkpoint : MonoBehaviour {
 
-	public static Checkpoint active;
-	public GameObject playerPrefab;
-
 	void OnTriggerEnter(Collider other) {
 		if (other.transform.root.gameObject.layer == 8) {
-			active = this;
+			Activate ();
+		}
+	}
+
+	public void Activate () {
+		if (LevelController.current.ActivateCheckpoint (this)) {
+			Debug.Log ("Checkpoint!!!");
 		}
 	}
 
 	public void SpawnPlayer () {
-		Instantiate(playerPrefab,transform.position, transform.rotation);
+		Instantiate(LevelController.current.playerPrefab, transform.position, transform.rotation);
 	}
 }

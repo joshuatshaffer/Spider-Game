@@ -17,7 +17,7 @@ public class Player : MonoBehaviour {
 	}
 
 	void Update () {
-		if (transform.position.y < -300) {
+		if (transform.position.y < LevelController.current.killHeight) {
 			Kill();
 		}
 	}
@@ -29,6 +29,6 @@ public class Player : MonoBehaviour {
 
 	void Die () {
 		Destroy(gameObject);
-		(Instantiate(deathFade) as GameObject).transform.SetParent(GameplayUI.current.transform, false);
+		LevelController.current.PlayerDied();
 	}
 }
