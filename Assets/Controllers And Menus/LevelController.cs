@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 using System.Collections;
 using System.Collections.Generic;
 
@@ -31,6 +32,10 @@ public class LevelController : MonoBehaviour {
 		if (!paused && Input.GetButtonDown("Cancel")) {
 			Pause();
 		}
+	}
+
+	public void QuitLevel () {
+		SceneManager.LoadScene("Main Menu");
 	}
 
 	public void Pause() {
