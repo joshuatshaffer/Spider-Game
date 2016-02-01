@@ -26,7 +26,7 @@ namespace PlayerMovement {
 			head.Init (ground);
 			movement.Init (body, ground, head, transform);
 
-			SetCurserLock ();
+			SetCurserLock (true);
 		}
 
 		void Update () {
@@ -37,6 +37,14 @@ namespace PlayerMovement {
 		void FixedUpdate () {
 			ground.Update ();
 			movement.FixedUpdate ();
+		}
+
+		void OnPause () {
+			SetCurserLock(false);
+		}
+
+		void OnUnpause () {
+			SetCurserLock(true);
 		}
 
 		void SetCurserLock (bool isLocked=true) {
