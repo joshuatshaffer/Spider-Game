@@ -12,7 +12,7 @@ public class LevelSelect : MonoBehaviour {
 
 	void Awake () {
 		int campaignProgress = PlayerPrefs.GetInt("CampaignProgress")+1;
-		for (int i=0; i<numberOfLevels; ++i) {
+		for (int i=1; i<=numberOfLevels; ++i) {
 			if (i > campaignProgress) {
 				GameObject button = (GameObject)Instantiate(lockedLevelPrefab);
 				button.transform.SetParent(placeToPutLevels, false);
