@@ -79,8 +79,9 @@ public class LevelController : MonoBehaviour {
 	}
 
 	public void QuitLevel () {
-		SceneManager.LoadScene("Main Menu");
+		Unpause ();
 		SetCurserLock (false);
+		SceneManager.LoadScene("Main Menu");
 	}
 
 	public void Pause() {
