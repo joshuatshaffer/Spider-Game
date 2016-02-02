@@ -3,6 +3,7 @@ using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using System.Collections;
 using System.Collections.Generic;
+using System.Text.RegularExpressions;
 
 //This must be above all scripts that refer to LevelController.current in the execution order.
 public class LevelController : MonoBehaviour {
@@ -70,6 +71,7 @@ public class LevelController : MonoBehaviour {
 		if (state != LevelState.normal) return;
 		state = LevelState.won;
 		InstantiateFade (winFade);
+		LevelSelect.WonLevel(SceneManager.GetActiveScene().name);
 	}
 
 	void InstantiateFade (GameObject fade) {
