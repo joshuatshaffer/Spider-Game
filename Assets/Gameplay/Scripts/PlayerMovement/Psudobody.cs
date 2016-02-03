@@ -42,6 +42,8 @@ namespace PlayerMovement {
 			Debug.Log(b);
 
 			if (groundBody != null) {
+				groundBody.SendMessage ("OnPlatformLeave", SendMessageOptions.DontRequireReceiver);
+
 				position = DerelevisePosition(position);
 				rotation = DereleviseRotation(rotation);
 
@@ -53,6 +55,8 @@ namespace PlayerMovement {
 			}
 			groundBody = b;
 			if (b != null) {
+				groundBody.SendMessage ("OnPlatformEnter", SendMessageOptions.DontRequireReceiver);
+
 				velocity = ReleviseDirection(velocity - groundBody.GetPointVelocity(position));
 				angularVelocity = ReleviseDirection(angularVelocity - groundBody.angularVelocity);
 
