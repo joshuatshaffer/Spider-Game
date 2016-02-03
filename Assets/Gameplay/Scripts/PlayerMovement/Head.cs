@@ -10,7 +10,7 @@ namespace PlayerMovement {
 		public float minHeadPitch = -89.0f;
 		public Transform head, neck;
 
-		private Vector3 lastHeadAxis, lastNeckAxis;
+		public Vector3 lastHeadAxis, lastNeckAxis;
 
 		private Ground ground;
 		private Psudobody body;
@@ -60,7 +60,7 @@ namespace PlayerMovement {
 		}
 		public Vector3 neckForward {
 			get {
-					return body.ReleviseDirection( neck.forward);
+					return body.ReleviseDirection(neck.forward);
 			}
 		}
 		public Vector3 axis {

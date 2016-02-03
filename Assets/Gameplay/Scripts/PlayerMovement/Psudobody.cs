@@ -15,8 +15,9 @@ namespace PlayerMovement {
 
 		private Transform transform;
 		private Ground ground;
-
-		public void Init (Transform t, Ground g) {
+		private Head head;
+		public void Init (Head h, Transform t, Ground g) {
+			head = h;
 			transform = t;
 			ground = g;
 
@@ -42,16 +43,19 @@ namespace PlayerMovement {
 				position = DerelevisePosition(position);
 				rotation = DereleviseRotation(rotation);
 
-				//velocity = DereleviseDirection(velocity);
-				//angularVelocity = DereleviseDirection(angularVelocity);
+				velocity = DereleviseDirection(velocity);
+				angularVelocity = DereleviseDirection(angularVelocity);
+
+				head.lastHeadAxis = DereleviseDirection(head.lastHeadAxis);
+				head.lastNeckAxis = DereleviseDirection(head.lastNeckAxis);
 			}
 			gbody = b;
 			if (b != null) {
 				position = RelevisePosition(transform.position);
 				rotation = ReleviseRotation(rotation);
 
-				//velocity = ReleviseDirection(velocity);
-				//angularVelocity = ReleviseDirection(angularVelocity);
+				velocity = ReleviseDirection(velocity);
+				angularVelocity = ReleviseDirection(angularVelocity);
 			}
 		}
 
@@ -105,7 +109,7 @@ namespace PlayerMovement {
 		}
 		public Quaternion ReleviseRotation (Quaternion rot) {
 			if (gbody != null) {
-				return rot;
+				return Quaternion.Inverse (gbody.rotation) * rot;
 			} else {
 				return rot;
 			}
@@ -127,7 +131,7 @@ namespace PlayerMovement {
 		}
 		public Quaternion DereleviseRotation (Quaternion rot) {
 			if (gbody != null) {
-				return rot;
+				return gbody.rotation * rot;
 			} else {
 				return rot;
 			}
@@ -136,12 +140,12 @@ namespace PlayerMovement {
 
 		public Vector3 forward {
 			get {
-				return DereleviseRotation(rotation) * Vector3.forward;
+				return rotation * Vector3.forward;
 			}
 		}
 		public Vector3 up {
 			get {
-				return DereleviseRotation(rotation) * Vector3.up;
+				return rotation * Vector3.up;
 			}
 		}
 	}

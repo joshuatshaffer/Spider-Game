@@ -100,9 +100,7 @@ namespace PlayerMovement {
 		}
 
 		void GroundedAngular () {
-			Vector3 wantedAngularVelocity = 
-				Vector3.Cross (body.up, ground.normal) + 
-				Vector3.Cross(body.forward, head.neckForward);
+			Vector3 wantedAngularVelocity = Vector3.Cross (body.up, ground.normal);
 			wantedAngularVelocity *= angularCorrection;
 			body.AddTorque (wantedAngularVelocity - body.angularVelocity * rotationStoping, ForceMode.Acceleration);
 		}

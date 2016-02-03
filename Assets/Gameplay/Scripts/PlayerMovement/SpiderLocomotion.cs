@@ -23,7 +23,7 @@ namespace PlayerMovement {
 			ground.Init (body, feet, transform);
 			head.Init (ground, body);
 			movement.Init (body, ground, head, transform);
-			body.Init(transform, ground);
+			body.Init(head, transform, ground);
 
 			OnUnpause ();
 		}
