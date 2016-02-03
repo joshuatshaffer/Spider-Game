@@ -2,10 +2,6 @@
 using System.Collections;
 using System.Collections.Generic;
 
-/*
- * TODO
- * remove jitter when on rigidbody (probably due to position update timeing)
- */
 namespace PlayerMovement {
 	public class SpiderLocomotion : MonoBehaviour {
 
@@ -14,7 +10,7 @@ namespace PlayerMovement {
 		public Feet feet;
 		public Psudobody body;
 
-		[System.NonSerialized]private Ground ground;
+		[System.NonSerialized] private Ground ground;
 
 		void Awake () {
 			ground = new Ground ();
@@ -40,19 +36,8 @@ namespace PlayerMovement {
 			ground.Update ();
 			movement.FixedUpdate ();
 
-			body.FixedUpdate();
+			body.FixedUpdate ();
 		}
-
-		/*void Update () {
-
-
-			ground.Update ();
-			movement.FixedUpdate ();
-			body.FixedUpdate();
-
-			head.Update ();
-		}*/
-
 
 		void OnUnpause () {
 			LevelController.current.SetCurserLock (true);

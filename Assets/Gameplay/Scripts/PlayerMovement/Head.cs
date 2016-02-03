@@ -48,30 +48,10 @@ namespace PlayerMovement {
 			lastHeadAxis = body.ReleviseDirection(head.forward);
 		}
 
-		public Vector3 forward {
-			get {
-				return Vector3.ProjectOnPlane (body.ReleviseDirection(neck.forward), ground.normal).normalized;
-			}
-		}
-		public Vector3 right {
-			get {
-				return Vector3.ProjectOnPlane (body.ReleviseDirection(neck.right), ground.normal).normalized;
-			}
-		}
-		public Vector3 neckForward {
-			get {
-					return body.ReleviseDirection(neck.forward);
-			}
-		}
-		public Vector3 axis {
-			get {
-				return body.ReleviseDirection(head.forward);
-			}
-		}
-		public Quaternion rotation {
-			get {
-				return body.ReleviseRotation(head.rotation);
-			}
-		}
+		public Vector3 forward {get{return Vector3.ProjectOnPlane(body.ReleviseDirection(neck.forward),ground.normal).normalized;}}
+		public Vector3 right {get{return Vector3.ProjectOnPlane(body.ReleviseDirection(neck.right),ground.normal).normalized;}}
+		public Vector3 neckForward {get{return body.ReleviseDirection(neck.forward);}}
+		public Vector3 axis {get{return body.ReleviseDirection(head.forward);}}
+		public Quaternion rotation {get{return body.ReleviseRotation(head.rotation);}}
 	}
 }

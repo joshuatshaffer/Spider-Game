@@ -99,59 +99,38 @@ namespace PlayerMovement {
 		}
 
 		public Vector3 ReleviseDirection (Vector3 worldDirection) {
-			if (groundBody != null) {
+			if (groundBody != null)
 				return groundBody.transform.InverseTransformDirection(worldDirection);
-			} else {
-				return worldDirection;
-			}
+			return worldDirection;
 		}
 		public Vector3 RelevisePosition (Vector3 worldPosition) {
-			if (groundBody != null) {
+			if (groundBody != null)
 				return groundBody.transform.InverseTransformPoint(worldPosition);
-			} else {
-				return worldPosition;
-			}
+			return worldPosition;
 		}
 		public Quaternion ReleviseRotation (Quaternion worldRotation) {
-			if (groundBody != null) {
+			if (groundBody != null)
 				return Quaternion.Inverse (groundBody.rotation) * worldRotation;
-			} else {
-				return worldRotation;
-			}
+			return worldRotation;
 		}
 
 		public Vector3 DereleviseDirection (Vector3 localDirection) {
-			if (groundBody != null) {
+			if (groundBody != null)
 				return groundBody.transform.TransformDirection(localDirection);
-			} else {
-				return localDirection;
-			}
+			return localDirection;
 		}
 		public Vector3 DerelevisePosition (Vector3 localPosition) {
-			if (groundBody != null) {
+			if (groundBody != null)
 				return groundBody.transform.TransformPoint(localPosition);
-			} else {
-				return localPosition;
-			}
+			return localPosition;
 		}
 		public Quaternion DereleviseRotation (Quaternion localRotaton) {
-			if (groundBody != null) {
+			if (groundBody != null)
 				return groundBody.rotation * localRotaton;
-			} else {
-				return localRotaton;
-			}
+			return localRotaton;
 		}
 
-
-		public Vector3 forward {
-			get {
-				return rotation * Vector3.forward;
-			}
-		}
-		public Vector3 up {
-			get {
-				return rotation * Vector3.up;
-			}
-		}
+		public Vector3 forward {get{return rotation * Vector3.forward;}}
+		public Vector3 up {get{return rotation * Vector3.up;}}
 	}
 }
