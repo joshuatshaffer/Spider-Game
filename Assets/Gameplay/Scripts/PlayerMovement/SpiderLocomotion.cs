@@ -7,24 +7,23 @@ using System.Collections.Generic;
  * remove jitter when on rigidbody (probably due to position update timeing)
  */
 namespace PlayerMovement {
-	[RequireComponent (typeof (Rigidbody))]
 	public class SpiderLocomotion : MonoBehaviour {
 
 		public Movement movement;
 		public Head head;
 		public Feet feet;
+		public Psudobody body;
 
 		private Ground ground;
-		private Rigidbody body;
 
 		void Awake () {
 			ground = new Ground ();
-			body = GetComponent<Rigidbody> ();
 
-			feet.Init (body, ground);
-			ground.Init (body, feet);
+			feet.Init (transform, ground);
+			ground.Init (feet, transform);
 			head.Init (ground);
 			movement.Init (body, ground, head, transform);
+			body.Init(transform);
 
 			OnUnpause ();
 		}
@@ -37,6 +36,7 @@ namespace PlayerMovement {
 		void FixedUpdate () {
 			ground.Update ();
 			movement.FixedUpdate ();
+			body.FixedUpdate();
 		}
 
 		void OnUnpause () {

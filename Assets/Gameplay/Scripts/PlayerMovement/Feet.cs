@@ -11,11 +11,11 @@ namespace PlayerMovement {
 
 		private Vector3[] directions;
 
-		private Rigidbody body;
+		private Transform transform;
 		private Ground ground;
 
-		public void Init (Rigidbody b, Ground g) {
-			body = b;
+		public void Init (Transform t, Ground g) {
+			transform = t;
 			ground = g;
 
 			List<Vector3> spherePoints = initialize_sphere(4);
@@ -30,13 +30,13 @@ namespace PlayerMovement {
 		public void Casts () {
 			foreach (Vector3 d in directions) {
 				RaycastHit hit;
-				if (Physics.Raycast (body.position, body.rotation * d, out hit, length, ~0, QueryTriggerInteraction.Ignore)) {
-					if (hit.rigidbody != body) {
+				if (Physics.Raycast (transform.position, transform.rotation * d, out hit, length, ~0, QueryTriggerInteraction.Ignore)) {
+					if (hit.rigidbody != transform) {
 						ground.ProcessHit (hit);
 					}
-					if (debug) Debug.DrawRay (body.position, body.rotation * d, Color.green);
+					if (debug) Debug.DrawRay (transform.position, transform.rotation * d, Color.green);
 				} else {
-					if (debug) Debug.DrawRay (body.position, body.rotation * d, Color.red);
+					if (debug) Debug.DrawRay (transform.position, transform.rotation * d, Color.red);
 				}
 			}
 		}

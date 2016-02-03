@@ -6,7 +6,7 @@ namespace PlayerMovement {
 	public class Ground {
 
 		private Feet feet;
-		private Rigidbody body;
+		private Transform transform;
 
 		public Vector3 centroid { get; private set; }
 		public Vector3 normal { get; private set; }
@@ -15,15 +15,12 @@ namespace PlayerMovement {
 		public bool isGrounded = false, hasTraction = false;
 		private int numberOfHits;
 
-		public void Init (Rigidbody b, Feet f) {
-			body = b;
+		public void Init (Feet f, Transform t) {
 			feet = f;
+			transform = t;
 		}
 
 		public void Update () {
-			Vector3 lastVelocity = velocity;
-			Vector3 lastAngularVelocity = angularVelocity;
-
 			numberOfHits = 0;
 			velocity = angularVelocity = centroid = normal = Vector3.zero;
 			hasTraction = false;
@@ -37,8 +34,7 @@ namespace PlayerMovement {
 				normal = normal.normalized;
 				isGrounded = true;
 
-				body.AddTorque (angularVelocity - lastAngularVelocity, ForceMode.VelocityChange);
-				body.AddForce (velocity - lastVelocity, ForceMode.VelocityChange);
+				//TODO body.ChangeGroundbody();
 			} else {
 				velocity = angularVelocity = Vector3.zero;
 				isGrounded = false;
@@ -53,7 +49,7 @@ namespace PlayerMovement {
 			if (!IsSlippery(hit.collider.material)) {
 				hasTraction = true;
 				if (hit.rigidbody != null) {
-					velocity += hit.rigidbody.GetPointVelocity (body.position);
+					velocity += hit.rigidbody.GetPointVelocity (transform.position);
 					angularVelocity += hit.rigidbody.angularVelocity;
 				}
 			}
