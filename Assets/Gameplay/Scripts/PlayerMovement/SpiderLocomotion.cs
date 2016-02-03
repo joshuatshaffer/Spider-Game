@@ -43,5 +43,8 @@ namespace PlayerMovement {
 			LevelController.current.SetCurserLock (true);
 			Input.ResetInputAxes();
 		}
+
+		public Vector3 worldVelocity { get { return body.worldVelocity; } }
+		public Vector3 worldAngularVelocity { get { return body.worldAngularVelocity; } }
 	}
 }

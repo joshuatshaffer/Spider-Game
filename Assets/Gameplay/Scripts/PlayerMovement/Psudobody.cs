@@ -129,7 +129,24 @@ namespace PlayerMovement {
 				return groundBody.rotation * localRotaton;
 			return localRotaton;
 		}
-
+		public Vector3 worldVelocity {
+			get {
+				if (groundBody != null) {
+					return DereleviseDirection (velocity) + groundBody.GetPointVelocity (position);
+				} else {
+					return velocity;
+				}
+			}
+		}
+		public Vector3 worldAngularVelocity {
+			get {
+				if (groundBody != null) {
+					return DereleviseDirection(angularVelocity) + groundBody.angularVelocity;
+				} else {
+					return angularVelocity;
+				}
+			}
+		}
 		public Vector3 forward {get{return rotation * Vector3.forward;}}
 		public Vector3 up {get{return rotation * Vector3.up;}}
 	}
