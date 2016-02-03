@@ -4,7 +4,6 @@ using System.Collections;
 public class Player : MonoBehaviour {
 
 	public static Player current;
-	public GameObject deathFade;
 	public Transform eyePosition;
 
 	void Awake () {
