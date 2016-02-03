@@ -20,24 +20,25 @@ namespace PlayerMovement {
 			ground = new Ground ();
 
 			feet.Init (transform, ground);
-			ground.Init (feet, transform);
-			head.Init (ground);
+			ground.Init (body, feet, transform);
+			head.Init (ground, body);
 			movement.Init (body, ground, head, transform);
-			body.Init(transform);
+			body.Init(transform, ground);
 
 			OnUnpause ();
 		}
 
 		void Update () {
-			head.Update ();
 			movement.Update ();
-		}
 
-		void FixedUpdate () {
+
 			ground.Update ();
 			movement.FixedUpdate ();
 			body.FixedUpdate();
+
+			head.Update ();
 		}
+
 
 		void OnUnpause () {
 			LevelController.current.SetCurserLock (true);

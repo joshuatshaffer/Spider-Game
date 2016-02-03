@@ -13,10 +13,11 @@ namespace PlayerMovement {
 		private Vector3 lastHeadAxis, lastNeckAxis;
 
 		private Ground ground;
+		private Psudobody body;
 
-		public void Init (Ground g) {
+		public void Init (Ground g, Psudobody b) {
 			ground = g;
-
+			body = b;
 			lastHeadAxis = head.forward;
 			lastNeckAxis = neck.forward;
 		}
@@ -24,12 +25,8 @@ namespace PlayerMovement {
 		public void Update () {
 			//Head and neck MUST be done separately because singularities are a pain.
 
-			Quaternion groundRotation = Quaternion.AngleAxis(
-				ground.angularVelocity.magnitude * Mathf.Rad2Deg * Time.fixedDeltaTime, 
-				ground.angularVelocity);
-
-			lastNeckAxis = groundRotation * lastNeckAxis;
-			lastHeadAxis = groundRotation * lastHeadAxis;
+			lastHeadAxis = body.DereleviseDirection(lastHeadAxis);
+			lastNeckAxis = body.DereleviseDirection(lastNeckAxis);
 
 			lastNeckAxis = neck.parent.InverseTransformVector(lastNeckAxis);
 			lastHeadAxis = neck.InverseTransformVector(lastHeadAxis);
@@ -47,33 +44,33 @@ namespace PlayerMovement {
 			neck.localRotation = Quaternion.Euler(0,yaw,0);
 			head.localRotation = Quaternion.Euler(pitch,0,0);
 
-			lastNeckAxis = neck.forward;
-			lastHeadAxis = head.forward;
+			lastNeckAxis = body.ReleviseDirection(neck.forward);
+			lastHeadAxis = body.ReleviseDirection(head.forward);
 		}
 
 		public Vector3 forward {
 			get {
-				return Vector3.ProjectOnPlane (neck.forward, ground.normal).normalized;
+				return Vector3.ProjectOnPlane (body.ReleviseDirection(neck.forward), ground.normal).normalized;
 			}
 		}
 		public Vector3 right {
 			get {
-				return Vector3.ProjectOnPlane (neck.right, ground.normal).normalized;
+				return Vector3.ProjectOnPlane (body.ReleviseDirection(neck.right), ground.normal).normalized;
 			}
 		}
 		public Vector3 neckForward {
 			get {
-				return neck.forward;
+					return body.ReleviseDirection( neck.forward);
 			}
 		}
 		public Vector3 axis {
 			get {
-				return head.forward;
+				return body.ReleviseDirection(head.forward);
 			}
 		}
 		public Quaternion rotation {
 			get {
-				return head.rotation;
+				return body.ReleviseRotation(head.rotation);
 			}
 		}
 	}

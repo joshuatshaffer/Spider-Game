@@ -5,53 +5,55 @@ using System.Collections.Generic;
 namespace PlayerMovement {
 	public class Ground {
 
+		private Psudobody body;
 		private Feet feet;
 		private Transform transform;
 
-		public Vector3 centroid { get; private set; }
-		public Vector3 normal { get; private set; }
-		public Vector3 velocity { get; private set; }
-		public Vector3 angularVelocity { get; private set; }
+		public Vector3 centroid ;
+		public Vector3 normal ;
 		public bool isGrounded = false, hasTraction = false;
 		private int numberOfHits;
+		private FrequencyCounter fc;
 
-		public void Init (Feet f, Transform t) {
+		public void Init (Psudobody b, Feet f, Transform t) {
+			body = b;
 			feet = f;
 			transform = t;
 		}
 
 		public void Update () {
 			numberOfHits = 0;
-			velocity = angularVelocity = centroid = normal = Vector3.zero;
+			centroid = normal = Vector3.zero;
 			hasTraction = false;
+			fc = new FrequencyCounter();
 
 			feet.Casts ();
 
 			if (numberOfHits > 0) {
-				velocity /= numberOfHits;
-				angularVelocity /= numberOfHits;
 				centroid /= numberOfHits;
 				normal = normal.normalized;
 				isGrounded = true;
-
-				//TODO body.ChangeGroundbody();
 			} else {
-				velocity = angularVelocity = Vector3.zero;
 				isGrounded = false;
 			}
+
+			if (hasTraction) {
+				body.ChangeGroundbody(fc.Mode());
+			} else {
+				body.ChangeGroundbody(null);
+			}
+
+			centroid = body.RelevisePosition(centroid);
+			normal = body.ReleviseDirection(normal);
 		}
 
 		public void ProcessHit (RaycastHit hit) {
 			++numberOfHits;
 			centroid += hit.point;
 			normal += hit.normal;
-
 			if (!IsSlippery(hit.collider.material)) {
 				hasTraction = true;
-				if (hit.rigidbody != null) {
-					velocity += hit.rigidbody.GetPointVelocity (transform.position);
-					angularVelocity += hit.rigidbody.angularVelocity;
-				}
+				fc.Occured(hit.rigidbody);
 			}
 		}
 

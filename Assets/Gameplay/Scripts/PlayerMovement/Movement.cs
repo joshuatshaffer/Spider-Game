@@ -25,13 +25,11 @@ namespace PlayerMovement {
 		private Psudobody body;
 		private Ground ground;
 		private Head head;
-		private Transform transform;
 
 		public void Init (Psudobody b, Ground g, Head h, Transform t) {
 			body = b;
 			ground = g;
 			head = h;
-			transform = t;
 		}
 
 		public void Update () {
@@ -60,7 +58,8 @@ namespace PlayerMovement {
 
 		void TractionLinear () {
 			body.useGravity = false;
-			Vector3 correctionVelocity = ground.centroid - (transform.position - ground.normal * standingHeight);
+
+			Vector3 correctionVelocity = ground.centroid - (body.position - ground.normal * standingHeight);
 			correctionVelocity = Vector3.Project (correctionVelocity, ground.normal) * linearCorrection;
 
 			Vector3 wantedVelocity = head.forward * Input.GetAxis ("Vertical");
@@ -68,16 +67,16 @@ namespace PlayerMovement {
 			wantedVelocity = Vector3.ClampMagnitude(wantedVelocity, 1) * movmentSpeed;
 
 			wantedVelocity += correctionVelocity;
-			body.AddForce (wantedVelocity - (body.velocity - ground.velocity) * velocityStoping, ForceMode.Acceleration);
+			body.AddForce (wantedVelocity - body.velocity * velocityStoping, ForceMode.Acceleration);
 		}
 
 		void SlipLinear () {
 			body.useGravity = false;
 			bool gravDone = false;
 
-			Vector3 wantedVelocity = ground.centroid - (transform.position - ground.normal * standingHeight);
+			Vector3 wantedVelocity = ground.centroid - (body.position - ground.normal * standingHeight);
 			wantedVelocity = Vector3.Project (wantedVelocity, ground.normal) * linearCorrection;
-			wantedVelocity -= (body.velocity - ground.velocity) * velocityStoping;
+			wantedVelocity -= body.velocity * velocityStoping;
 			wantedVelocity = Vector3.Project (wantedVelocity, ground.normal);
 
 			if (Vector3.Dot (wantedVelocity, ground.normal) > 0) {
@@ -102,17 +101,17 @@ namespace PlayerMovement {
 
 		void GroundedAngular () {
 			Vector3 wantedAngularVelocity = 
-				Vector3.Cross (transform.up, ground.normal) + 
-				Vector3.Cross(transform.forward, head.neckForward);
+				Vector3.Cross (body.up, ground.normal) + 
+				Vector3.Cross(body.forward, head.neckForward);
 			wantedAngularVelocity *= angularCorrection;
-			body.AddTorque (wantedAngularVelocity - (body.angularVelocity - ground.angularVelocity) * rotationStoping, ForceMode.Acceleration);
+			body.AddTorque (wantedAngularVelocity - body.angularVelocity * rotationStoping, ForceMode.Acceleration);
 		}
 
 		void FallingAngular () {
 			body.useGravity = true;
 			Vector3 wantedAngularVelocity = 
-				Vector3.Cross (transform.up, head.rotation * new Vector3(0.0f, 0.707106781186548f, -0.707106781186548f)) +
-				Vector3.Cross(transform.forward, head.neckForward);
+				Vector3.Cross (body.up, head.rotation * new Vector3(0.0f, 0.707106781186548f, -0.707106781186548f)) +
+				Vector3.Cross(body.forward, head.neckForward);
 			wantedAngularVelocity *= angularCorrection;
 			body.AddTorque (wantedAngularVelocity - body.angularVelocity * rotationStoping, ForceMode.Acceleration);
 		}
