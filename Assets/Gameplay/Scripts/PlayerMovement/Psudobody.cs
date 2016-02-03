@@ -45,19 +45,19 @@ namespace PlayerMovement {
 				position = DerelevisePosition(position);
 				rotation = DereleviseRotation(rotation);
 
-				velocity = DereleviseDirection(velocity);
-				angularVelocity = DereleviseDirection(angularVelocity);
+				velocity = DereleviseDirection(velocity) + groundBody.GetPointVelocity(position);
+				angularVelocity = DereleviseDirection(angularVelocity) + groundBody.angularVelocity;
 
 				head.lastHeadAxis = DereleviseDirection(head.lastHeadAxis);
 				head.lastNeckAxis = DereleviseDirection(head.lastNeckAxis);
 			}
 			groundBody = b;
 			if (b != null) {
+				velocity = ReleviseDirection(velocity - groundBody.GetPointVelocity(position));
+				angularVelocity = ReleviseDirection(angularVelocity - groundBody.angularVelocity);
+
 				position = RelevisePosition(transform.position);
 				rotation = ReleviseRotation(rotation);
-
-				velocity = ReleviseDirection(velocity);
-				angularVelocity = ReleviseDirection(angularVelocity);
 
 				head.lastHeadAxis = ReleviseDirection(head.lastHeadAxis);
 				head.lastNeckAxis = ReleviseDirection(head.lastNeckAxis);
