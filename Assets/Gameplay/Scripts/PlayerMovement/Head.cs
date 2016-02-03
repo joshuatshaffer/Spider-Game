@@ -12,8 +12,8 @@ namespace PlayerMovement {
 
 		public Vector3 lastHeadAxis, lastNeckAxis;
 
-		private Ground ground;
-		private Psudobody body;
+		[System.NonSerialized] private Ground ground;
+		[System.NonSerialized] private Psudobody body;
 
 		public void Init (Ground g, Psudobody b) {
 			ground = g;

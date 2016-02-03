@@ -5,20 +5,18 @@ using System.Collections.Generic;
 namespace PlayerMovement {
 	public class Ground {
 
-		private Psudobody body;
-		private Feet feet;
-		private Transform transform;
-
-		public Vector3 centroid ;
-		public Vector3 normal ;
+		public Vector3 centroid;
+		public Vector3 normal;
 		public bool isGrounded = false, hasTraction = false;
 		private int numberOfHits;
 		private FrequencyCounter fc;
 
-		public void Init (Psudobody b, Feet f, Transform t) {
+		[System.NonSerialized] private Psudobody body;
+		[System.NonSerialized] private Feet feet;
+
+		public void Init (Psudobody b, Feet f) {
 			body = b;
 			feet = f;
-			transform = t;
 		}
 
 		public void Update () {

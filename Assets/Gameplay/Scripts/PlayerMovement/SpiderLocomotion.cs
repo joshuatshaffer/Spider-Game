@@ -14,22 +14,36 @@ namespace PlayerMovement {
 		public Feet feet;
 		public Psudobody body;
 
-		private Ground ground;
+		[System.NonSerialized]private Ground ground;
 
 		void Awake () {
 			ground = new Ground ();
 
 			feet.Init (transform, ground);
-			ground.Init (body, feet, transform);
+			ground.Init (body, feet);
 			head.Init (ground, body);
 			movement.Init (body, ground, head, transform);
-			body.Init(head, transform, ground);
+			body.Init(head, transform);
 
 			OnUnpause ();
 		}
 
 		void Update () {
 			movement.Update ();
+			body.UpdatePositioning ();
+			head.Update ();
+		}
+
+		void FixedUpdate(){
+			body.UpdatePositioning ();
+
+			ground.Update ();
+			movement.FixedUpdate ();
+
+			body.FixedUpdate();
+		}
+
+		/*void Update () {
 
 
 			ground.Update ();
@@ -37,7 +51,7 @@ namespace PlayerMovement {
 			body.FixedUpdate();
 
 			head.Update ();
-		}
+		}*/
 
 
 		void OnUnpause () {

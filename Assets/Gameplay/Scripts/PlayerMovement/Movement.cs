@@ -22,9 +22,9 @@ namespace PlayerMovement {
 		private float lastJumpTime = 0;
 		private bool isJumping {get{return lastJumpTime + minJumpTime > Time.time;}}
 
-		private Psudobody body;
-		private Ground ground;
-		private Head head;
+		[System.NonSerialized] private Psudobody body;
+		[System.NonSerialized] private Ground ground;
+		[System.NonSerialized] private Head head;
 
 		public void Init (Psudobody b, Ground g, Head h, Transform t) {
 			body = b;

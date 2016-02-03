@@ -11,8 +11,8 @@ namespace PlayerMovement {
 
 		private Vector3[] directions;
 
-		private Transform transform;
-		private Ground ground;
+		[System.NonSerialized] private Transform transform;
+		[System.NonSerialized] private Ground ground;
 
 		public void Init (Transform t, Ground g) {
 			transform = t;

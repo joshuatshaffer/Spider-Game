@@ -7,39 +7,41 @@ namespace PlayerMovement {
 		
 		public bool useGravity = true;
 		public float mass = 1;
+
 		public Vector3 velocity, angularVelocity;
-		
-		public Rigidbody gbody;
 		public Vector3 position;
 		public Quaternion rotation;
+		
+		[System.NonSerialized] private Rigidbody groundBody;
+		[System.NonSerialized] private Transform transform;
+		[System.NonSerialized] private Head head;
 
-		private Transform transform;
-		private Ground ground;
-		private Head head;
-		public void Init (Head h, Transform t, Ground g) {
+		public void Init (Head h, Transform t) {
 			head = h;
 			transform = t;
-			ground = g;
 
 			position = transform.position;
 			rotation = transform.rotation;
 		}
 
-		public void FixedUpdate() {
+		public void FixedUpdate () {
 			if (useGravity) AddForce(Physics.gravity, ForceMode.Acceleration);
-			position += velocity * Time.deltaTime;
-			rotation = Quaternion.AngleAxis( angularVelocity.magnitude * Mathf.Rad2Deg * Time.deltaTime, angularVelocity) * rotation;
+			position += velocity * Time.fixedDeltaTime;
+			rotation = Quaternion.AngleAxis( angularVelocity.magnitude * Mathf.Rad2Deg * Time.fixedDeltaTime, angularVelocity) * rotation;
+			UpdatePositioning ();
+		}
 
+		public void UpdatePositioning () {
 			transform.position = DerelevisePosition(position);
 			transform.rotation = DereleviseRotation(rotation);
 		}
 
 		public void ChangeGroundbody (Rigidbody b) {
-			if (gbody == b) return;
+			if (groundBody == b) return;
 
 			Debug.Log(b);
 
-			if (gbody != null) {
+			if (groundBody != null) {
 				position = DerelevisePosition(position);
 				rotation = DereleviseRotation(rotation);
 
@@ -49,23 +51,26 @@ namespace PlayerMovement {
 				head.lastHeadAxis = DereleviseDirection(head.lastHeadAxis);
 				head.lastNeckAxis = DereleviseDirection(head.lastNeckAxis);
 			}
-			gbody = b;
+			groundBody = b;
 			if (b != null) {
 				position = RelevisePosition(transform.position);
 				rotation = ReleviseRotation(rotation);
 
 				velocity = ReleviseDirection(velocity);
 				angularVelocity = ReleviseDirection(angularVelocity);
+
+				head.lastHeadAxis = ReleviseDirection(head.lastHeadAxis);
+				head.lastNeckAxis = ReleviseDirection(head.lastNeckAxis);
 			}
 		}
 
 		public void AddForce(Vector3 force, ForceMode mode = ForceMode.Force) {
 			switch (mode) {
 			case ForceMode.Acceleration:
-				velocity += force * Time.deltaTime;
+				velocity += force * Time.fixedDeltaTime;
 				break;
 			case ForceMode.Force:
-				velocity += force / mass * Time.deltaTime;
+				velocity += force / mass * Time.fixedDeltaTime;
 				break;
 			case ForceMode.VelocityChange:
 				velocity += force;
@@ -79,10 +84,10 @@ namespace PlayerMovement {
 		public void AddTorque(Vector3 torque, ForceMode mode) {
 			switch (mode) {
 			case ForceMode.Acceleration:
-				angularVelocity += torque * Time.deltaTime;
+				angularVelocity += torque * Time.fixedDeltaTime;
 				break;
 			case ForceMode.Force:
-				angularVelocity += torque / mass * Time.deltaTime;
+				angularVelocity += torque / mass * Time.fixedDeltaTime;
 				break;
 			case ForceMode.VelocityChange:
 				angularVelocity += torque;
@@ -93,47 +98,47 @@ namespace PlayerMovement {
 			}
 		}
 
-		public Vector3 ReleviseDirection (Vector3 dir) {
-			if (gbody != null) {
-				return gbody.transform.InverseTransformDirection(dir);
+		public Vector3 ReleviseDirection (Vector3 worldDirection) {
+			if (groundBody != null) {
+				return groundBody.transform.InverseTransformDirection(worldDirection);
 			} else {
-				return dir;
+				return worldDirection;
 			}
 		}
-		public Vector3 RelevisePosition (Vector3 pos) {
-			if (gbody != null) {
-				return gbody.transform.InverseTransformPoint(pos);
+		public Vector3 RelevisePosition (Vector3 worldPosition) {
+			if (groundBody != null) {
+				return groundBody.transform.InverseTransformPoint(worldPosition);
 			} else {
-				return pos;
+				return worldPosition;
 			}
 		}
-		public Quaternion ReleviseRotation (Quaternion rot) {
-			if (gbody != null) {
-				return Quaternion.Inverse (gbody.rotation) * rot;
+		public Quaternion ReleviseRotation (Quaternion worldRotation) {
+			if (groundBody != null) {
+				return Quaternion.Inverse (groundBody.rotation) * worldRotation;
 			} else {
-				return rot;
+				return worldRotation;
 			}
 		}
 
-		public Vector3 DereleviseDirection (Vector3 dir) {
-			if (gbody != null) {
-				return gbody.transform.TransformDirection(dir);
+		public Vector3 DereleviseDirection (Vector3 localDirection) {
+			if (groundBody != null) {
+				return groundBody.transform.TransformDirection(localDirection);
 			} else {
-				return dir;
+				return localDirection;
 			}
 		}
-		public Vector3 DerelevisePosition (Vector3 pos) {
-			if (gbody != null) {
-				return gbody.transform.TransformPoint(pos);
+		public Vector3 DerelevisePosition (Vector3 localPosition) {
+			if (groundBody != null) {
+				return groundBody.transform.TransformPoint(localPosition);
 			} else {
-				return pos;
+				return localPosition;
 			}
 		}
-		public Quaternion DereleviseRotation (Quaternion rot) {
-			if (gbody != null) {
-				return gbody.rotation * rot;
+		public Quaternion DereleviseRotation (Quaternion localRotaton) {
+			if (groundBody != null) {
+				return groundBody.rotation * localRotaton;
 			} else {
-				return rot;
+				return localRotaton;
 			}
 		}
 
