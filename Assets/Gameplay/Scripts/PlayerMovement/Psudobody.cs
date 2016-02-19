@@ -6,7 +6,7 @@ namespace PlayerMovement {
 	public class Psudobody {
 		
 		public bool useGravity = true;
-		public float mass = 1;
+		public float mass = 1, radius = 0.25f;
 
 		public Vector3 velocity, angularVelocity;
 		public Vector3 position;
@@ -26,9 +26,21 @@ namespace PlayerMovement {
 
 		public void FixedUpdate () {
 			if (useGravity) AddForce(Physics.gravity, ForceMode.Acceleration);
+			Vector3 lastposition = position;
 			position += velocity * Time.fixedDeltaTime;
-			rotation = Quaternion.AngleAxis( angularVelocity.magnitude * Mathf.Rad2Deg * Time.fixedDeltaTime, angularVelocity) * rotation;
+			CheckTunnenling (lastposition);
+			rotation = Quaternion.AngleAxis(angularVelocity.magnitude * Mathf.Rad2Deg * Time.fixedDeltaTime, angularVelocity) * rotation;
 			UpdatePositioning ();
+		}
+
+		void CheckTunnenling (Vector3 lastposition) {
+			RaycastHit hit;
+			lastposition = DerelevisePosition (lastposition);
+			Vector3 deltaPosition = DerelevisePosition (position) - lastposition;
+			if (Physics.SphereCast(lastposition, radius, deltaPosition, out hit, deltaPosition.magnitude,~0,QueryTriggerInteraction.Ignore)) {
+				position = RelevisePosition (hit.point + hit.normal * radius);
+				velocity = Vector3.ProjectOnPlane (velocity, ReleviseDirection (hit.normal));
+			}
 		}
 
 		public void UpdatePositioning () {
