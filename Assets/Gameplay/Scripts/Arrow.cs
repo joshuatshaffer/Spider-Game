@@ -26,12 +26,12 @@ public class Arrow : MonoBehaviour {
 
 	void FixedUpdate () {
 		RaycastHit hitInfo;
-		if (Physics.Linecast (lastPosition, transform.position, out hitInfo)) {
+		if (Physics.Linecast (lastPosition, transform.position, out hitInfo, ~0, QueryTriggerInteraction.Ignore)) {
 			//Stick to the hit object
 			transform.position = hitInfo.point;
 			gameObject.AddComponent<PinTo> ().Setup(hitInfo.transform);
 
-			//Simulate a perfictly inelastic collistion
+			//Simulate a totally inelastic collistion
 			if (hitInfo.rigidbody != null) {
 				float ma = body.mass;
 				Vector3 ua = body.velocity;

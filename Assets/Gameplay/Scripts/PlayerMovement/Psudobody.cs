@@ -31,6 +31,14 @@ namespace PlayerMovement {
 			CheckTunnenling (lastposition);
 			rotation = Quaternion.AngleAxis(angularVelocity.magnitude * Mathf.Rad2Deg * Time.fixedDeltaTime, angularVelocity) * rotation;
 			UpdatePositioning ();
+			TouchTriggers ();
+		}
+
+		void TouchTriggers () {
+			Collider[] hits = Physics.OverlapSphere(DerelevisePosition(position), radius, 1 << 9);
+			foreach (Collider c in hits) {
+				c.SendMessageUpwards ("OnPlayerTouch", SendMessageOptions.DontRequireReceiver);
+			}
 		}
 
 		void CheckTunnenling (Vector3 lastposition) {

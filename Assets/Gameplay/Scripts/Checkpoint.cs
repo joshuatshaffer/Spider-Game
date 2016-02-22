@@ -3,10 +3,8 @@ using System.Collections;
 
 public class Checkpoint : MonoBehaviour {
 
-	void OnTriggerEnter(Collider other) {
-		if (other.transform.root.gameObject.layer == 8) {
-			Activate ();
-		}
+	void OnPlayerTouch () {
+		Activate ();
 	}
 
 	public void Activate () {
