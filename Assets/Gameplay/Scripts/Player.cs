@@ -28,6 +28,7 @@ public class Player : MonoBehaviour {
 
 	void Die () {
 		Destroy(gameObject);
-		LevelController.current.PlayerDied();
+		current = null;
+		Checkpoint.SpawnPlayer ();
 	}
 }

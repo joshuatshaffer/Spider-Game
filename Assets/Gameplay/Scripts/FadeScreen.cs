@@ -35,7 +35,7 @@ public class FadeScreen : MonoBehaviour {
 				break;
 			case ActionOnFin.respawnPlayer:
 				Destroy(gameObject);
-				LevelController.current.SpawnPlayer();
+				//LevelController.current.SpawnPlayer();
 				break;
 			}
 		}

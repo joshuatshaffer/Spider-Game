@@ -9,7 +9,6 @@ using System.Text.RegularExpressions;
 public class LevelController : MonoBehaviour {
 
 	public static LevelController current;
-	public Checkpoint activeCheckpoint;
 	public GameObject gameplayCanvace;
 	public GameObject playerPrefab;
 
@@ -24,8 +23,6 @@ public class LevelController : MonoBehaviour {
 
 	public float killHeight = -100;
 
-	public GameObject deathFade;
-	public GameObject respawnFade;
 	public GameObject winFade;
 
 	private RenderTexture lastTexture;
@@ -40,31 +37,12 @@ public class LevelController : MonoBehaviour {
 		}
 		state = LevelState.normal;
 		pauseMenu.SetActive(false);
-		activeCheckpoint.SpawnPlayer ();
 	}
 	
 	void Update () {
 		if (Input.GetButtonDown("Cancel")) {
 			Pause();
 		}
-	}
-	
-	public bool ActivateCheckpoint (Checkpoint cp) {
-		if (activeCheckpoint != cp) {
-			activeCheckpoint = cp;
-			return true;
-		} else {
-			return false;
-		}
-	}
-
-	public void PlayerDied () {
-		InstantiateFade (deathFade);
-	}
-
-	public void SpawnPlayer () {
-		activeCheckpoint.SpawnPlayer ();
-		InstantiateFade (respawnFade);
 	}
 	
 	public void WinLevel () {
