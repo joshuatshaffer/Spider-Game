@@ -5,6 +5,7 @@ public class Player : MonoBehaviour {
 
 	public static Player current;
 	public Transform eyePosition;
+	public GameObject deathFadePrefab;
 
 	void Awake () {
 		if (current == null) {
@@ -29,6 +30,7 @@ public class Player : MonoBehaviour {
 	void Die () {
 		Destroy(gameObject);
 		current = null;
-		Checkpoint.SpawnPlayer ();
+		float duration = Instantiate (deathFadePrefab).GetComponent<FadeScreen>().duration;
+		Checkpoint.activeCheckpoint.Invoke ("SpawnPlayer", duration);
 	}
 }

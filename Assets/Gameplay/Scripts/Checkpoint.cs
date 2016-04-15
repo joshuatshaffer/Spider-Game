@@ -3,7 +3,7 @@ using System.Collections;
 
 public class Checkpoint : MonoBehaviour {
 
-	static Checkpoint activeCheckpoint;
+	public static Checkpoint activeCheckpoint;
 	public bool isStart = false;
 
 	void Awake () {
@@ -37,7 +37,7 @@ public class Checkpoint : MonoBehaviour {
 		}
 	}
 
-	public static void SpawnPlayer () {
-		Instantiate(LevelController.current.playerPrefab, activeCheckpoint.transform.position, activeCheckpoint.transform.rotation);
+	public void SpawnPlayer () {
+		Instantiate(LevelController.current.playerPrefab, transform.position, transform.rotation);
 	}
 }

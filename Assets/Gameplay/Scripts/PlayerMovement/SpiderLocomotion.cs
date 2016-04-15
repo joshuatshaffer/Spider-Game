@@ -40,7 +40,7 @@ namespace PlayerMovement {
 		}
 
 		void OnUnpause () {
-			LevelController.current.SetCurserLock (true);
+			GameController.SetCurserLock (true);
 			Input.ResetInputAxes();
 		}
 
