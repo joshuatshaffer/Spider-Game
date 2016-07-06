@@ -20,7 +20,7 @@ namespace PlayerMovement {
 		public float jumpSpeed = 9.3f;
 		public float minJumpTime = 0.4f;
 		private float lastJumpTime = 0;
-		private bool isJumping {get{return lastJumpTime + minJumpTime > Time.time;}}
+		public bool isJumping {get{return lastJumpTime + minJumpTime > Time.time;}}
 
 		[System.NonSerialized] private Psudobody body;
 		[System.NonSerialized] private Ground ground;

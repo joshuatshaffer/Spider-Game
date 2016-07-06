@@ -8,7 +8,7 @@ public class FadeScreen : MonoBehaviour {
 	public Color start, end;
 
 	private float startTime = 0;
-	private GUITexture guiTexture;
+	new private GUITexture guiTexture;
 
 	void Awake () {
 		startTime = Time.time;

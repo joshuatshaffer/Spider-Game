@@ -11,6 +11,9 @@ namespace PlayerMovement {
 		public Psudobody body;
 
 		[System.NonSerialized] private Ground ground;
+		[System.NonSerialized] private StepingSounds stepingSounds;
+
+		private Vector3 lastPos;
 
 		void Awake () {
 			ground = new Ground ();
@@ -21,6 +24,9 @@ namespace PlayerMovement {
 			movement.Init (body, ground, head, transform);
 			body.Init(head, transform);
 
+			stepingSounds = gameObject.GetComponent<StepingSounds> ();
+			lastPos = transform.position;
+
 			OnUnpause ();
 		}
 
@@ -28,6 +34,8 @@ namespace PlayerMovement {
 			movement.Update ();
 			body.UpdatePositioning ();
 			head.Update ();
+			if (ground.hasTraction && !movement.isJumping)
+				stepingSounds.Ack_Moved((body.velocity * Time.deltaTime).magnitude);
 		}
 
 		void FixedUpdate(){
